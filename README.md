@@ -2,7 +2,7 @@
 
 一套面向 Codex 的短视频内容质量 Skill。它用于参考视频分析、选题、脚本、制作前完整预览检查，以及用户明确要求时的发布前审计。
 
-当前版本：**1.7.4**
+当前版本：**1.7.5**
 
 ## 它解决什么问题
 
@@ -57,6 +57,14 @@ git clone https://github.com/wzzjzj/short-video-content-gates.git "$env:USERPROF
 ```powershell
 node scripts/safe-layout.mjs
 ```
+
+对 HTML 视频执行只读的配置可见性预检；抖音 1080×1920 页面同时检查共享安全区内的实际文字边界：
+
+```powershell
+node scripts/check-visible-layout.mjs --html index.html --platform douyin
+```
+
+省略 `--platform` 时只检查配置绑定是否可见。`NO_STATIC_FINDINGS` 不代表成片通过；动画、遮挡、素材身份、音频和封面仍需按实际输出审查。
 
 生成实际画面的安全区与裁切证据：
 

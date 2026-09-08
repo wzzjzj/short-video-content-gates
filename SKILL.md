@@ -2,7 +2,7 @@
 name: short-video-content-gates
 description: 分析参考视频并提炼可迁移机制，以及评估跨项目、跨工具的短视频立项、内容实质、脚本和完整预览前质量；仅在用户明确要求判断能否发布或由智能体执行外部发布时启用严格发布审计。用于参考热门或竞品视频策划内容，或创建、审查、修改、制作和准备发布短视频时；纯转码、混音等不改变内容决策的技术操作不触发。
 metadata:
-  version: "1.7.4"
+  version: "1.7.5"
   short-description: 跨项目短视频内容决策与质量门禁
 ---
 
@@ -44,7 +44,7 @@ metadata:
    - references/gate-model.md
    - references/result-contract.md
    - 只有用户明确要求判断“能否发布”或要求智能体执行外部发布时，才读取 references/release-evidence-schema.md 并执行 `pre-publish`。
-5. 制作抖音 1080×1920 视频时，在设计稿和首版排版前执行 references/gate-model.md 的“首版布局”：HyperFrames 运行 `scripts/safe-layout.mjs`，将输出用于实际信息层；不要从历史工程或脚手架沿用另一套留白。背景与信息层分离，后续以实际渲染证据判断安全，不以写过设计说明或用户确认代替。
+5. 制作抖音 1080×1920 视频时，在设计稿和首版排版前执行 references/gate-model.md 的“首版布局”：HyperFrames 运行 `scripts/safe-layout.mjs`，将输出用于实际信息层；不要从历史工程或脚手架沿用另一套留白。背景与信息层分离，后续以实际渲染证据判断安全，不以写过设计说明或用户确认代替。HTML视频在首次完整预览前按该章节运行共享 `scripts/check-visible-layout.mjs`，检查对象包含容器外文字和配置绑定；它不代替动画与实片审查。
 6. 若任务包含分析参考视频、竞品视频、热门模板或“提取优点”，还必须读取 references/reference-analysis.md，并先完成该模式再进入 intake。参考分析不是 intake PASS，不能替代本账号的需求和事实核验。
 7. 若用户只要求分析或审计，仅在回答中报告，不写回项目。
 
