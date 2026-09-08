@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "platform": "douyin",
+  "canvas": { "width": 1080, "height": 1920 },
+  "blocked": {
+    "top": { "x": 0, "y": 0, "width": 1080, "height": 280 },
+    "right": { "x": 880, "y": 0, "width": 200, "height": 1920 },
+    "lower": { "x": 0, "y": 1240, "width": 1080, "height": 680 }
+  },
+  "core": { "x": 72, "y": 280, "width": 788, "height": 960 },
+  "coverCrop3x4": { "x": 0, "y": 240, "width": 1080, "height": 1440 },
+  "homeThumbnail": {
+    "width": 360,
+    "height": 480,
+    "blocked": {
+      "topLeft": { "x": 0, "y": 0, "width": 120, "height": 90 },
+      "bottomLeft": { "x": 0, "y": 410, "width": 140, "height": 70 }
+    }
+  }
+}

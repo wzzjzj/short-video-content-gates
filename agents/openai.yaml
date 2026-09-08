@@ -1,0 +1,7 @@
+interface:
+  display_name: "短视频内容门禁"
+  short_description: "跨项目短视频立项、脚本、制作前与发布前的内容质量门禁"
+  default_prompt: "使用 $short-video-content-gates 审查这条短视频在进入制作前是否满足内容门禁。"
+
+policy:
+  allow_implicit_invocation: true

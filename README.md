@@ -1,0 +1,84 @@
+# short-video-content-gates
+
+一套面向 Codex 的短视频内容质量 Skill。它用于参考视频分析、选题、脚本、制作前完整预览检查，以及用户明确要求时的发布前审计。
+
+当前版本：**1.7.4**
+
+## 它解决什么问题
+
+- 检查短视频是否有明确受众、单一核心承诺和足够的内容实质。
+- 在第一次提交完整预览前，一并核对视频、封面或首屏、标题、文案、话题和必要声明。
+- 为抖音 1080×1920 视频提供统一的界面安全区基线。
+- 生成播放页遮罩、3:4 封面裁切和主页缩略图证据。
+- 仅在用户明确要求判断能否发布或由智能体执行发布时启用严格发布审计。
+
+它不提供账号数据、商业事实、门店配置、素材版权许可、视频制作引擎或自动发布权限。项目仍需维护自己的事实来源和账号规则。
+
+## 安装
+
+### Codex
+
+将整个仓库克隆或复制到用户级 Skills 目录：
+
+```powershell
+git clone https://github.com/wzzjzj/short-video-content-gates.git "$env:USERPROFILE\.codex\skills\short-video-content-gates"
+```
+
+如果目标目录已经存在，请先确认其中是否有自己的修改；不要直接覆盖。安装后重新启动 Codex，使技能清单刷新。
+
+也可以下载 Release 压缩包，解压后确保目录结构为：
+
+```text
+%USERPROFILE%\.codex\skills\short-video-content-gates\SKILL.md
+```
+
+## 使用
+
+在请求中明确写：
+
+```text
+使用 $short-video-content-gates 审查这条短视频的选题和脚本。
+```
+
+安装后也允许 Codex 在匹配的短视频任务中自动调用。严格发布审计不会自动启用，除非用户明确要求判断“能否发布”或要求智能体执行外部发布。
+
+## 工具
+
+生成首版安全信息层 CSS：
+
+```powershell
+node scripts/safe-layout.mjs
+```
+
+生成实际画面的安全区与裁切证据：
+
+```powershell
+python scripts/make-safe-area-evidence.py --frame frame.png --cover cover.png --out-dir qa/pre-production-safety
+```
+
+该 Python 工具需要 Pillow。它只生成证据图，不会自动判定通过。
+
+严格发布审计的检查器与安装钩子分别位于：
+
+- `scripts/check-release.mjs`
+- `scripts/install-release-hook.mjs`
+
+具体启用条件和证据结构以 [SKILL.md](SKILL.md) 及 [references](references/) 为准。
+
+## 目录
+
+```text
+SKILL.md
+agents/
+references/
+scripts/
+```
+
+## 隐私与项目边界
+
+本公开仓库只包含通用方法、坐标基线和工具，不包含作者的私有视频、账号数据、门店信息、本机计划钩子或 HyperFrames 安装配置。
+
+## 许可证
+
+[MIT License](LICENSE)
+
