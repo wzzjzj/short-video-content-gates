@@ -2,7 +2,7 @@
 name: short-video-content-gates
 description: 分析参考视频并提炼可迁移机制，以及评估跨项目、跨工具的短视频立项、内容实质、脚本和完整预览前质量；仅在用户明确要求判断能否发布或由智能体执行外部发布时启用严格发布审计。用于参考热门或竞品视频策划内容，或创建、审查、修改、制作和准备发布短视频时；纯转码、混音等不改变内容决策的技术操作不触发。
 metadata:
-  version: "1.7.5"
+  version: "1.7.6"
   short-description: 跨项目短视频内容决策与质量门禁
 ---
 
@@ -44,7 +44,7 @@ metadata:
    - references/gate-model.md
    - references/result-contract.md
    - 只有用户明确要求判断“能否发布”或要求智能体执行外部发布时，才读取 references/release-evidence-schema.md 并执行 `pre-publish`。
-5. 制作抖音 1080×1920 视频时，在设计稿和首版排版前执行 references/gate-model.md 的“首版布局”：HyperFrames 运行 `scripts/safe-layout.mjs`，将输出用于实际信息层；不要从历史工程或脚手架沿用另一套留白。背景与信息层分离，后续以实际渲染证据判断安全，不以写过设计说明或用户确认代替。HTML视频在首次完整预览前按该章节运行共享 `scripts/check-visible-layout.mjs`，检查对象包含容器外文字和配置绑定；它不代替动画与实片审查。
+5. 抖音 1080×1920 的首版布局与预览验收统一执行 references/gate-model.md 的“首版布局”和“实际画面验收”；HTML疑点诊断见同文件的按需章节。
 6. 若任务包含分析参考视频、竞品视频、热门模板或“提取优点”，还必须读取 references/reference-analysis.md，并先完成该模式再进入 intake。参考分析不是 intake PASS，不能替代本账号的需求和事实核验。
 7. 若用户只要求分析或审计，仅在回答中报告，不写回项目。
 
@@ -79,7 +79,7 @@ metadata:
 5. 日常制作汇总问题后集中修订，只复核受改动影响的内容；未变化的事实与证据沿用。质量结论不接管制作授权、用户确认或任务完成；缺口未解决时如实标注，不伪造 PASS。严格发布审计沿用上表的按需边界。
 7. post-publish 不是每条视频的必经阶段。只有用户明确要求复盘或主动提供数据时，才形成当前账号观察、项目内重复证据或跨账号候选规律；只有用户明确批准，才可修改本 Skill。
 8. 抖音项目按 references/gate-model.md 的唯一坐标基线执行；项目文件只记录本条视频的检查对象、证据和结论，不复制坐标规则。
-9. 抖音 1080×1920 日常制作在第一次完整预览前，使用 `python scripts/make-safe-area-evidence.py --frame <实际代表帧> [--frame <更多代表帧>] --cover <实际封面> --out-dir <视频目录>/qa/pre-production-safety` 一次生成播放页遮罩、3:4 封面裁切与主页缩略图证据。该工具只生成证据、不自动给出 PASS；检查生成图后才能记录 `pre-production` 结论。发现多项问题时先汇总并集中修订，再统一复核；只有与遮挡或裁切有关的关键布局、文字或封面发生变化时才重生成相关证据，不因编码、记录或无关技术检查重复生成。工具忽略 `frame.md`、设计预设或 CSS 中的通用留白值。
+9. 画面与封面检查执行 references/gate-model.md 的“实际画面验收”，结果按 references/result-contract.md 保存。
 10. 只有用户明确触发严格发布审计时，才按 references/release-evidence-schema.md 保存机器证据并用 `scripts/check-release.mjs --video <视频目录>` 验证。普通本地制作和交付不生成该证据，也不保留“待发布检查”待办。
 11. 本 Skill 只记录质量门禁、必要的检查对象事实和“门禁绕过”事故，不维护制作状态或决定任务完成；文件已经生成、交付或发布不能反向把门禁改成 PASS，门禁 BLOCK 也不能抹掉已经发生的事实。
 12. 只有项目提供自动 `publish` 脚本且用户明确要求由智能体执行发布时，才调用 `scripts/install-release-hook.mjs --project-root <项目根> --video <视频目录>` 安装 npm `prepublish` 钩子。安装器发现既有不同的 `prepublish` 时必须停止，不得覆盖。用户自行在手机端发布不需要安装该钩子。
