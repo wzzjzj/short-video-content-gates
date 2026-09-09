@@ -2,7 +2,7 @@
 name: short-video-content-gates
 description: 分析参考视频并提炼可迁移机制，以及评估跨项目、跨工具的短视频立项、内容实质、脚本和完整预览前质量；仅在用户明确要求判断能否发布或由智能体执行外部发布时启用严格发布审计。用于参考热门或竞品视频策划内容，或创建、审查、修改、制作和准备发布短视频时；纯转码、混音等不改变内容决策的技术操作不触发。
 metadata:
-  version: "1.7.8"
+  version: "1.7.9"
   short-description: 跨项目短视频内容决策与质量门禁
 ---
 
@@ -44,7 +44,7 @@ metadata:
    - references/gate-model.md
    - references/result-contract.md
    - 只有用户明确要求判断“能否发布”或要求智能体执行外部发布时，才读取 references/release-evidence-schema.md 并执行 `pre-publish`。
-5. 抖音 1080×1920 的首版布局与预览验收统一执行 references/gate-model.md 的“首版布局”和“实际画面验收”；HTML疑点诊断见同文件的按需章节。
+5. 抖音 1080×1920 制作：首版将全部可读内容接入现成安全信息层；首次完整预览前运行 `scripts/check-preview-package.py` 并查看本次遮罩与封面证据。参数、适用引擎及判定统一见 references/gate-model.md 的“首版布局”和“实际画面验收”。
 6. 若任务包含分析参考视频、竞品视频、热门模板或“提取优点”，还必须读取 references/reference-analysis.md，并先完成该模式再进入 intake。参考分析不是 intake PASS，不能替代本账号的需求和事实核验。
 7. 若用户只要求分析或审计，仅在回答中报告，不写回项目。
 

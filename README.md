@@ -2,7 +2,7 @@
 
 一套面向 Codex 的短视频内容质量 Skill。它用于参考视频分析、选题、脚本、制作前完整预览检查，以及用户明确要求时的发布前审计。
 
-当前版本：**1.7.8**
+当前版本：**1.7.9**
 
 ## 它解决什么问题
 
@@ -73,6 +73,14 @@ python scripts/make-safe-area-evidence.py --frame frame.png --cover cover.png --
 ```
 
 该 Python 工具需要 Pillow。它只生成证据图，不会自动判定通过。
+
+首次完整预览可用统一入口串联布局、遮罩、封面裁切、主页缩略图和发布资料检查：
+
+```powershell
+python scripts/check-preview-package.py --html index.html --cover cover.png --publish PUBLISH.md --template PUBLISH-TEMPLATE.md --out-dir qa/preview-check
+```
+
+入口只返回 `READY_FOR_VISUAL_REVIEW`、`BLOCK` 或 `INCOMPLETE`，不会自动写入质量 PASS。
 
 严格发布审计的检查器与安装钩子分别位于：
 
