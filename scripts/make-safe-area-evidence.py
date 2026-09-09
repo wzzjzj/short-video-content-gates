@@ -50,7 +50,9 @@ def check_materials(publish: Path, template: Path) -> list[str]:
     for field in required:
         if "可选" in field:
             continue
-        value = actual.get(field, "").strip().strip('`').strip()
+        # Parenthesized text in a template label is author guidance, not part of the field name.
+        lookup = re.sub(r"（[^）]+）$", "", field).strip()
+        value = actual.get(field, actual.get(lookup, "")).strip().strip('`').strip()
         if not value or re.fullmatch(r"待.*|TODO.*|TBD.*|[—\-…]+|<.*>|\{.*\}", value, re.I):
             issues.append("PUBLISH_FIELD_MISSING: " + field)
     return issues

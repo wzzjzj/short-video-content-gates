@@ -12,7 +12,7 @@
 
 ### 首版布局
 
-HyperFrames 在第一版 HTML 排版前运行 `node <本 Skill>/scripts/safe-layout.mjs`，把输出的 CSS 纳入现有样式，并在每个场景内用 `.platform-safe-content` 包住标题、字幕、品牌、CTA 和可读标签。数值由上述唯一 JSON 生成，不维护另一份坐标表。其他工具使用同一坐标源设置对应的信息层区域。
+HyperFrames 使用准备入口生成的 `platform-safe.css`；尚未生成时运行 `node <本 Skill>/scripts/safe-layout.mjs` 获取样式。每个场景的全部可读内容都放进 `.platform-safe-content`，包括片尾提问、小字、字幕和 Logo；容器外只放背景和无信息图形。已有生成样式直接引用，不在页面重写坐标。其他工具使用同一 JSON 设置对应的信息层区域。
 
 该容器坐标相对于完整的 1080×1920 场景；照片、纹理放在容器外铺满画布。容器内优先使用正常流、flex 或 grid；局部定位以容器为参照，不沿用全画布的 top/left。不要通过 overflow:hidden 隐藏越界文字来冒充安全：文本完整边界及其可读期间的动画轨迹都需留在区域内，缩放和位移作用于背景或独立内层时也要核对实际效果。封面仍按原有裁切证据核对，不直接把播放页容器当作封面裁切通过证明。
 

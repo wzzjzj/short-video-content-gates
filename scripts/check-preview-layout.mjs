@@ -41,6 +41,8 @@ export async function checkPreview({ html, outDir, times, browserPath, puppeteer
     });
     page.on('pageerror', e => unavailable.push(e.message));
     page.on('requestfailed', r => { if (['script','stylesheet','font','image'].includes(r.resourceType())) unavailable.push('Failed: ' + r.url()); });
+    // Framework-hosted pages may register directly without creating the registry themselves.
+    await page.evaluateOnNewDocument(() => { window.__timelines = window.__timelines || {}; });
     await page.goto(pathToFileURL(source).href, { waitUntil: 'load', timeout: 30000 });
     // Use the installed framework runtime for clip visibility and media seeking as well as animation.
     if (!(await page.evaluate(() => !!window.__playerReady))) {
@@ -52,13 +54,17 @@ export async function checkPreview({ html, outDir, times, browserPath, puppeteer
     await page.evaluate(async () => { await document.fonts.ready; document.querySelectorAll('audio,video').forEach(e => { e.pause(); e.muted = true; }); });
     const info = await page.evaluate(() => {
       const root = document.querySelector('[data-composition-id]');
-      const timelines = Object.values(window.__timelines || {});
+      const entries = Object.entries(window.__timelines || {}).filter(([key]) => key !== '__proxied');
+      const timelines = entries.filter(([, value]) => value && typeof value.seek === 'function');
       return { width: Number(root?.dataset.width), height: Number(root?.dataset.height), duration: Number(root?.dataset.duration), timelines: timelines.length,
+        timelineKeys: entries.map(([key]) => key), invalidTimelineKeys: entries.filter(([, value]) => !value || typeof value.seek !== 'function').map(([key]) => key),
         safeLayers: document.querySelectorAll('.platform-safe-content').length,
         midpoints: [...document.querySelectorAll('[data-start][data-duration]')].map(e => Number(e.dataset.start) + Number(e.dataset.duration) / 2) };
     });
     if (info.width !== zones.canvas.width || info.height !== zones.canvas.height) throw new Error('Only declared Douyin 1080x1920 compositions are supported.');
-    if (info.timelines !== 1 || !(info.duration > 0 && info.duration <= 600)) throw new Error('Require one seekable timeline and duration in (0,600]. Nested/multiple timelines need their own rendered review.');
+    if (info.timelines !== 1 || info.invalidTimelineKeys.length || !(info.duration > 0 && info.duration <= 600)) {
+      throw new Error('Timeline inspection unavailable: ' + JSON.stringify({ count: info.timelines, keys: info.timelineKeys, invalidKeys: info.invalidTimelineKeys, duration: info.duration, errors: unavailable }) + '. Require one seekable timeline and duration in (0,600].');
+    }
     if (!info.safeLayers) issues.push({ code: 'SAFE_LAYOUT_NOT_CONNECTED' });
     const selected = [...new Set((times || info.midpoints).filter(t => Number.isFinite(t) && t >= 0 && t < info.duration))].sort((a,b) => a-b);
     if (!selected.length) throw new Error('No valid representative times.');
