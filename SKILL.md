@@ -2,7 +2,7 @@
 name: short-video-content-gates
 description: 分析参考视频并提炼可迁移机制，以及评估跨项目、跨工具的短视频立项、内容实质、脚本和完整预览前质量；仅在用户明确要求判断能否发布或由智能体执行外部发布时启用严格发布审计。用于参考热门或竞品视频策划内容，或创建、审查、修改、制作和准备发布短视频时；纯转码、混音等不改变内容决策的技术操作不触发。
 metadata:
-  version: "1.7.9"
+  version: "1.7.10"
   short-description: 跨项目短视频内容决策与质量门禁
 ---
 
@@ -44,7 +44,7 @@ metadata:
    - references/gate-model.md
    - references/result-contract.md
    - 只有用户明确要求判断“能否发布”或要求智能体执行外部发布时，才读取 references/release-evidence-schema.md 并执行 `pre-publish`。
-5. 抖音 1080×1920 制作：首版将全部可读内容接入现成安全信息层；首次完整预览前运行 `scripts/check-preview-package.py` 并查看本次遮罩与封面证据。参数、适用引擎及判定统一见 references/gate-model.md 的“首版布局”和“实际画面验收”。
+5. 抖音 1080×1920 制作：首版将全部可读内容接入现成安全信息层；首次完整预览前执行项目已接入的完整检查（本地准备入口安装的 `npm.cmd run check` 已包含预览包检查），查看本次遮罩与封面证据，不重复运行同一检查。未接入的其他环境使用 `scripts/check-preview-package.py`。参数、适用引擎及判定见 references/gate-model.md。
 6. 若任务包含分析参考视频、竞品视频、热门模板或“提取优点”，还必须读取 references/reference-analysis.md，并先完成该模式再进入 intake。参考分析不是 intake PASS，不能替代本账号的需求和事实核验。
 7. 若用户只要求分析或审计，仅在回答中报告，不写回项目。
 
@@ -68,7 +68,7 @@ metadata:
 | pre-publish（按需） | 仅在用户明确要求判断“能否发布”或要求智能体执行外部发布时，以待发布成片和封面的哈希及发布资料执行严格复核 | PASS 后才可标记“可发布”或由智能体执行发布；不得成为日常本地制作、交付或完成条件 |
 | post-publish（按需） | 仅在用户明确要求复盘或主动提供数据时执行 | 完成当前账号观察记录，不自动改写共享规则 |
 
-只评估当前任务已有材料所对应的阶段，不为满足本 Skill 而创建强制阶段链、用户确认点或制作状态。普通视频制作应在第一次完整预览交付前把内容兑现、实际画面、封面或首屏、标题、文案、话题、必要声明和平台适配一次检查并完成内部修订；不创建默认 `pre-publish` 待办，也不把它换名为另一道完成门槛。用户已授权制作时，REVISE 应直接指导当前制作中的最小修订。只有用户明确触发按需发布审计时，`pre-publish PASS` 才是标记“可发布”或由智能体执行外部发布的前提。EXCEPTION 必须有明确批准者、理由、范围和日期，且不能绕过平台 UI。
+只评估当前材料对应的阶段；各项检查共用本次方案、预览和证据，合并记录，不逐阶段重做制作流程。首次完整预览前完成日常检查与内部修订；严格发布审计仅按上表触发。EXCEPTION须有批准者、理由、范围和日期，不能绕过平台UI。质量状态不代替用户授权或确认，具体结论及交付边界统一见result-contract.md。
 
 ## 执行方式
 
@@ -76,13 +76,9 @@ metadata:
 2. 依 references/gate-model.md 判定 BLOCK、REVISE 和观察项，不把预测值伪装成确定事实。
 3. 依 references/result-contract.md 保存本次结果；方法保存在 Skill，项目只保存这一次的判断证据。
 4. 参考视频任务先产出可复核的分析结果，再将其中的可迁移机制作为 intake 的一项输入；不能从参考视频直接跳到脚本或制作。
-5. 日常制作汇总问题后集中修订，只复核受改动影响的内容；未变化的事实与证据沿用。质量结论不接管制作授权、用户确认或任务完成；缺口未解决时如实标注，不伪造 PASS。严格发布审计沿用上表的按需边界。
-7. post-publish 不是每条视频的必经阶段。只有用户明确要求复盘或主动提供数据时，才形成当前账号观察、项目内重复证据或跨账号候选规律；只有用户明确批准，才可修改本 Skill。
-8. 抖音项目按 references/gate-model.md 的唯一坐标基线执行；项目文件只记录本条视频的检查对象、证据和结论，不复制坐标规则。
-9. 画面与封面检查执行 references/gate-model.md 的“实际画面验收”，结果按 references/result-contract.md 保存。
-10. 只有用户明确触发严格发布审计时，才按 references/release-evidence-schema.md 保存机器证据并用 `scripts/check-release.mjs --video <视频目录>` 验证。普通本地制作和交付不生成该证据，也不保留“待发布检查”待办。
-11. 本 Skill 只记录质量门禁、必要的检查对象事实和“门禁绕过”事故，不维护制作状态或决定任务完成；文件已经生成、交付或发布不能反向把门禁改成 PASS，门禁 BLOCK 也不能抹掉已经发生的事实。
-12. 只有项目提供自动 `publish` 脚本且用户明确要求由智能体执行发布时，才调用 `scripts/install-release-hook.mjs --project-root <项目根> --video <视频目录>` 安装 npm `prepublish` 钩子。安装器发现既有不同的 `prepublish` 时必须停止，不得覆盖。用户自行在手机端发布不需要安装该钩子。
+5. 汇总问题后集中修订，只复核受改动影响的内容；未变化的事实与有效证据沿用，缺口如实标注。
+6. 严格发布审计触发后，按 references/release-evidence-schema.md 保存证据，运行 `scripts/check-release.mjs --video <视频目录>`。
+7. 项目有自动 `publish` 脚本且用户授权智能体执行发布时，运行 `scripts/install-release-hook.mjs --project-root <项目根> --video <视频目录>`；既有不同钩子不得覆盖。
 
 ## 规则治理
 

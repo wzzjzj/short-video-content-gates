@@ -7,7 +7,7 @@
 建议写入位置：
 
 - reference-analysis：优先写入当前选题或视频工程现有 BRIEF 的“参考视频分析”区域；尚未立项时写入项目已有的研究记录，不为单条参考另建平行门禁规则文件。
-- intake、script-review、pre-production：现有 BRIEF、制作记录或 PUBLISH 的既有质量复核区域；第一次完整预览前完成，不另建一道交付门槛。
+- intake、script-review、pre-production：详细依据统一写入现有 BRIEF；PUBLISH只保存发布资料、总结论和报告指针，不重复逐项检查记录。
 - pre-publish：仅在用户明确要求判断“能否发布”或要求智能体执行外部发布时，写入现有 PUBLISH 或发布验收区域。
 - post-publish：仅在用户明确要求复盘或主动提供数据时，写入现有 PUBLISH 数据区和当前账号的数据台账。
 - 状态文件只记录结论与指针，不复制完整规则。
